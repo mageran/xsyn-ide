@@ -1,6 +1,6 @@
 {
-    "name": "userAuth",
-    "main": "index.js",
+    "name": "xsyn-ide",
+    "main": "server.js",
     "dependencies": {
 	"bcryptjs": "^0.7.12",
 	"express": "^4.9.5",
