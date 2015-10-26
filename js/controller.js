@@ -295,8 +295,10 @@ xsynApp.directive('nonterminal',['$rootScope',function($rootScope) {
 		console.log('deleting nonterminal at position ' + index);
 		bootbox.confirm("Do you really want to delete this nonterminal with all its rules?", function(result) {
 		    if (!result) return;
-		    nonterminals.splice(index,1);
-		    $rootScope.refreshGrammar();
+		    $scope.$apply(function() {
+			nonterminals.splice(index,1);
+		    });
+		    //$rootScope.refreshGrammar();
 		});
 	    };
 	    $scope.addNonterminal = function() {
@@ -305,7 +307,7 @@ xsynApp.directive('nonterminal',['$rootScope',function($rootScope) {
 		    name : '',
 		    rules : [ { definition : '', action : '' } ]
 		};
-		nonterminals.splice(index,0,nt);
+		nonterminals.splice(index+1,0,nt);
 	    };
 	    //console.log($scope);
 	}
@@ -327,8 +329,10 @@ xsynApp.directive('productionrule',['$rootScope',function($rootScope) {
 		var doDelete = function(result) {
 		    if (!result) return;
 		    if (index >= 0) {
-			prules.splice(index,1);
-			$rootScope.refreshGrammar();
+			$scope.$apply(function() {
+			    prules.splice(index,1);
+			})
+			//$rootScope.refreshGrammar();
 		    }
 		};
 		bootbox.confirm("Do you really want to delete this rule? " +prules[index].definition,doDelete);
@@ -339,7 +343,7 @@ xsynApp.directive('productionrule',['$rootScope',function($rootScope) {
 		    definition : '',
 		    action : ''
 		};
-		nt.rules.splice(index,0,newRule);
+		nt.rules.splice(index+1,0,newRule);
 		//$rootScope.refreshGrammar();
 	    };
 	}
