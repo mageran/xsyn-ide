@@ -48,8 +48,9 @@ var DslServer = function(app,gmgr) {
 	var grammarObj = req.body;
 	try {
 	    var overwriteOk = false;
-	    gmgr.writeToFile(grammarObj,overwriteOk);
-	    gmgr.checkGrammar(grammarObj,module);
+	    var doCheck = true;
+	    gmgr.writeToFile(grammarObj,overwriteOk,module,doCheck);
+	    //gmgr.checkGrammar(grammarObj,module);
 	    res.status(200).json({message:'success'})
 	} catch (e) {
 	    res.status(400).json({error:''+e})

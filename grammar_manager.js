@@ -1,6 +1,7 @@
 var xsyn = require('node-xsyn')
 var fs = require('fs');
 var path = require('path');
+var inspect = require('util').inspect;
 
 
 
@@ -130,7 +131,7 @@ GrammarManager.prototype.removeGrammar = function(name) {
     return true;
 };
 
-GrammarManager.prototype.writeToFile = function(grammarObj,overwriteOk) {
+GrammarManager.prototype.writeToFile = function(grammarObj,overwriteOk,moduleContext,doCheck) {
     var name = grammarObj.name;
     if (!name) {
 	throw "Grammar object doesn't have a name field; can't update an anonymous grammar."
@@ -140,12 +141,31 @@ GrammarManager.prototype.writeToFile = function(grammarObj,overwriteOk) {
     var grammarString = xsyn.jsonToGrammarString(grammarObj);
     console.log(grammarString);
     fs.writeFileSync(fname,grammarString);
+    if (doCheck && moduleContext) {
+	this.checkGrammar(name,moduleContext);
+    }
 };
 
-GrammarManager.prototype.checkGrammar = function(grammarObj,moduleContext) {
+GrammarManager.prototype.checkGrammar = function(name,moduleContext) {
+    try {
+	var L = this.requireFromFile(name,module);
+	var lobj = new L();
+	return lobj.parser.generateLalr1Parser();
+    } catch (e) {
+	console.error("generateParser error: " + e)
+	throw e;
+    }
+}
+
+GrammarManager.prototype.checkGrammar_ = function(grammarObj,moduleContext) {
+    console.log('checking grammar...');
+    console.log(inspect(grammarObj,{depth:999}));
     var lclass = xsyn.requireFromJson(grammarObj,moduleContext);
+    console.log('require ok...');
     var lobj = new lclass();
+    console.log("generateLalr1Parser...");
     lobj.parser.generateLalr1Parser();
+    console.log('checking grammar ok.');
 };
 
 GrammarManager.prototype.watchGrammar = function(name,interval,moduleContext,require,callback) {
