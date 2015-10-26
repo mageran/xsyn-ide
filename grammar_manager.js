@@ -21,6 +21,7 @@ GrammarManager.prototype.ensureGrammarDir = function() {
 };
 
 GrammarManager.prototype.listGrammars = function(callback) {
+    this.ensureGrammarDir();
     var filterFiles = function(flist) {
 	var glist = [];
 	for(var i = 0; i < flist.length; i++) {
@@ -94,6 +95,7 @@ GrammarManager.prototype._initialGrammarContent = function(name) {
 };
 
 GrammarManager.prototype.createGrammar = function(name,overwriteOk) {
+    this.ensureGrammarDir();
     var fname = this.grammarFileName(name);
     var content = this._initialGrammarContent(name);
     if (!overwriteOk) {
