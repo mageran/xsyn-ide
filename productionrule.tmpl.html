@@ -1,0 +1,20 @@
+<td valign="top" style="padding-top:10px"><span ng-bind="sepsym"></span></td><td style="padding:10px">
+  <div>
+    <input style="width:500px" ng-model="prule.definition" placeholder="<epsilon-rule>" ng-if="isEditMode"/>
+    <span style="width:500px" ng-bind="prule.definition" placeholder="<epsilon-rule>" ng-if="!isEditMode"/>
+  </div>
+  <div class="animate-if" ng-if="showActionCode" style="padding-top:5px">
+    <textarea style="min-width:500px" rows="5" cols="80" ng-model="prule.action" placeholder="<default action>" ng-if="isEditMode"></textarea>
+    <pre style="max-width:700px;" ng-bind="prule.action" placeholder="<default action>" ng-if="!isEditMode"></pre>
+  </div>
+</td>
+<td align="left" valign="top" style="padding:10px">
+  <div ng-if="isEditMode" class="btn-group" role="group" aria-label="...">
+    <button title="add new rule here" ng-click="addRule()">
+      <span style="padding:10px" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+    <button title="Delete this rule" ng-click="deleteRule()">
+      <span style="padding:10px" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
+  </div>
+</td>

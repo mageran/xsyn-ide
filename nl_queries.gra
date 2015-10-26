@@ -1,0 +1,64 @@
+
+
+% name : 'NLQueries'
+
+SalesQuery : 'sales' 'by' 'country'
+	{% $$ = 'select sum(price),country from salesdata group by country order by sum(price) desc' %}
+	
+	| 'sales' 'by' 'company'
+	{% $$ = 'select companyname,sum(price) from salesdata group by companyname order by sum(price) desc' %}
+
+	| 'outstanding' 'balance' 'by' 'company'
+	{% $$ = 'select companyname,sum(price) from salesdata where paid = \'0\' group by companyname order by sum(price) desc' %}
+
+	| 'sales' 'by' 'product'
+	{% $$ = 'select product,sum(price) from salesdata group by product order by sum(price) desc' %}
+
+	| 'sales' 'by' 'country' 'and' 'product'
+	{% $$ = 'select sum(price),country,product from salesdata group by country,product order by sum(price) desc' %}
+
+	| 'sales' 'in' CountryName 'by' 'product'
+	{% $$ = "select country,product,sum(price) from salesdata where country = '" + $3+ "' group by product,country order by sum(price) desc" %}
+
+	| 'sales' DateSpec optBy {%
+	function(_,dspec,by) {
+	  var cond = "saledate > " + dspec;
+	  var cols = "companyname, product, price, saledate";
+	  var groupby = "";
+	  if (by === 'company') {
+	    cols = "companyname, sum(price)";
+	    groupby = "group by companyname";
+	  }
+	  else if (by === 'product') {
+	    cols = "product, sum(price)";
+	    groupby = "group by product";
+	  }
+	  return "select " + cols + " from salesdata where " + cond + " " + groupby;
+	} %}
+
+	| 'all' 'sales'
+	{% $$ = "select saledate,companyname,product,price,paid from salesdata order by saledate desc"; %}
+
+	;
+
+CountryName : ident
+	    | ident CountryName {% $$ = $1 + " " + $2 %}
+	    ;
+
+optBy : 'by' 'company' {% $$ = $2; %}
+      | 'by' 'product' {% $$ = $2; %}
+      | 
+      ;
+
+DateSpec : 'since' number '/' number '/' number
+	 {% $$ = "to_date('" + $2 + '/' + $4 + '/' + $6 + "','mm/dd/yyy')"; %}
+
+	 | 'last' DayWeekMonthYear
+	 {% $$ = "(current_date - interval '1 " + $2 + "')"; %}
+
+	 | 'today'
+	 {% $$ = "current_date"; %}
+	 ;
+
+DayWeekMonthYear : 'day' | 'week' | 'month' | 'year'
+		 ;

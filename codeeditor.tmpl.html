@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="pull-right dropdown">
+    <span style="color:red;" ng-bind="parseErrorMessage"></span>
+    <span style="color:{{glyphiconParseResult[1]}}" class="glyphicon {{glyphiconParseResult[0]}}"></span>
+    <span style="font-style:italic" ng-bind="selectedLanguage"></span>
+    <button ng-if="selectedLanguage" type="button" class="btn btn-default" ng-click="parseCode()">Parse</button>
+    <button ng-if="!grammarName" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Language
+      <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="gnobj in grammarNameObjects">
+	<a href="#"
+	   ng-click="doSelectLanguage(gnobj.name)">{{gnobj.name}}</a></li>
+    </ul>
+  </div>
+  <textarea style="margin:5px;border-radius:4px;width:100%;height:70%;" ng-model="code"></textarea>
+</div>
+

@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="pull-right">
+    <button title="add new grammar" ng-click="addGrammar()">
+      <span style="padding:10px" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+    <div style="height:2px" id="no-grammar-popover" title="" data-toggle="popover" data-placement="bottom" data-content="You have no grammars yet; use this button to create one!">
+    </div>
+  </div>
+  <ul id="grammar-tabs" class="nav nav-tabs" data-tabs="tabs" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}">
+    <li ng-repeat="gnobj in mc.grammarNameObjects" id="{{gnobj.name}}-tab" ng-class="{active:gnobj.active}"
+	class="ng-isolate-scope">
+      <a href="#{{gnobj.name}}" data-toggle="tab">{{gnobj.name}}</a>
+    </li>
+  </ul>
+  <!-- <grammar grammar-object="c.grammar"/> -->
+  <div id="grammar-tab-content" class="tab-content">
+    <div ng-repeat="gnobj in mc.grammarNameObjects" id="{{gnobj.name}}" class="tab-pane" ng-class="{active:gnobj.active}">
+      <grammar grammar-id="gnobj.name"/>
+    </div>
+  </div>
+</div>

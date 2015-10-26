@@ -1,0 +1,59 @@
+<div class="grammar-container">
+  <div ng-if="grammarProcessingError">
+    <div class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      {{grammarProcessingError}}
+    </div>
+  </div>
+  <div><h4>DSL {{grammarObject.name?("'" + grammarObject.name + "'"):""}}</h4></div>
+  <div>
+    <span style="margin-bottom:5px;display=inline" class="dropdown">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Actions&nbsp;
+	<span class="caret"></span></button>
+      <ul class="dropdown-menu">
+	<li><a href="#" nng-if="!grammarProcessingError" ng-click="rename()">Rename Grammar</a></li>
+	<li><a href="#" nng-if="!grammarProcessingError" ng-click="duplicate()">Duplicate Grammar</a></li>
+	<li><a href="#" ng-click="remove()">Remove Grammar</a></li>
+      </ul>
+    </span>
+    <span nng-if="!grammarProcessingError" style="margin-left:10px"><label>Show action code <input type="checkbox" ng-model="showActionCode"/></label></span>
+    <span nng-if="!grammarProcessingError" style="margin-left:10px"><label>Edit <input type="checkbox" ng-model="isEditMode"/></label></span>
+    <button nng-if="!grammarProcessingError" ng-click="submit($event)" type="button" style="float:right">Submit changes</button>
+  </div>
+  <div class="bs-callout bs-callout-danger" 
+       style="position:fixed;bottom:0;left:0;margin-bottom:0;width:98%;z-index:999999;margin-left:10px;display=inline;" ng-show="grammarForm.$error.pattern">
+    <h4 ng-bind="'\'' + grammarForm.$error.pattern[0].$viewValue + '\' is not a valid identifier'"></h4>
+  </div>
+  <div ng-if="!grammarProcessingError" class="panel panel-default" style="margin-top:10px">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#{{grammarObject.name}}-collapse1">Grammar Options</a>
+      </h4>
+    </div>
+    <div id="{{grammarObject.name}}-collapse1" class="panel-collapse collapse">
+      <div class="panel-body">
+	<table class="table-condensed">
+	  <tr>
+	    <td valign="middle"><label>Start symbol:</label></td>
+	    <td colspan="2" valign="middle">
+	      <span style="color:blue" ng-if="!isEditMode" ng-bind="grammarObject.start"></span>
+	      <select ng-if="isEditMode" class="form-control" ng-model="grammarObject.start" style="margin-bottom:10px">
+		<option ng-repeat="ntname in nonterminalNames" ng-disabled="!isEditMode" value="{{ntname}}">{{ntname}}</option>
+	      </select>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td><label>Code delimiters:</label></td>
+	    <td><label>start: <input ng-model="grammarObject.codeStart" ng-readonly="!isEditMode"/></label></td>
+	    <td><label>end: <input ng-model="grammarObject.codeEnd" ng-readonly="!isEditMode"/></label></td>
+	  </tr>
+	</table>
+      </div>
+      <!--<div class="panel-footer">Panel Footer</div>-->
+    </div>
+  </div>
+  <table class="table">
+    <tr nonterminal ng-repeat="nt in grammarObject.nonterminals">
+  </table>
+</div>

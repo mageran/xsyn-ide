@@ -1,0 +1,19 @@
+<td valign="top" style="padding-top:15px">
+  <input style="color:brown" ng-if="isEditMode" ng-model="nt.name" placeholder="name of nonterminal" ng-readonly="!isEditMode" ng-pattern="validIdentifierRegExp"/>
+  <span style="color:blue" ng-if="!isEditMode" ng-bind="nt.name" placeholder="name of nonterminal" ng-readonly="!isEditMode"></span>
+  <br/>
+  <div ng-if="isEditMode" style="padding-top:8px" class="btn-group" role="group" aria-label="...">
+    <button title="add new non-terminal here" ng-click="addNonterminal()">
+      <span style="padding:10px" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+    <button title="Delete this non-terminal" ng-click="deleteNonterminal()">
+      <span style="padding:10px" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
+  </div>
+</td>
+<td valign="top">
+  <table>
+    <tr productionrule ng-repeat-start="prule in nt.rules"/>
+    <tr ng-repeat-end><td ng-if="(nt.rules.indexOf(prule) === nt.rules.length-1)">;</td><td></td></tr>
+  </table>
+</td>

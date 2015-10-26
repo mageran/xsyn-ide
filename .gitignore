@@ -1,0 +1,9 @@
+
+__dummy.js
+
+.xsyn_gen
+bower_components
+*~
+mandrill.js
+xsyn_grammars
+node_modules

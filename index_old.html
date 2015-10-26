@@ -1,0 +1,59 @@
+<html ng-app="salesDataApp">
+  <head>
+    <title>A Sales Data Demo Using Angular</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </head>
+
+  <body ng-controller="SalesDataController as c">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.0/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="js/controller.js"></script>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" ui-sref="#">AngularUI Router</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a ui-sref="main">Main</a></li>
+        <li><a ui-sref="configure">Configure</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div ui-view=""></div>
+    </div>
+
+    <div class="input-area">
+      <label for="queryInput">What to you want to know?</label>
+      <input type="text"
+	     ng-model="c.nlquery"
+	     ng-model-options="{ updateOn: 'change' }"
+	     ng-change="c.updateResult()"
+	     ng-keyup="cancel($event)"
+	     id="queryInput"/>
+    </div>
+    
+    <div class="result-table">
+      <table class="bordered">
+	<thead>
+	  <tr>
+	    <th ng-repeat="field in c.fieldList">
+	      {{field.name}}
+	    </th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="record in c.salesRecords">
+	    <td ng-repeat="field in c.fieldList">{{c.formatField(record,field)}}</td>
+	  </tr>
+	</tbody>
+      </table>
+    </div>
+
+    <div class="error-bottom-of-page animated" id="error-div" ng-bind="c.errorMessage">
+    </div>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+<html ng-app="xsynApp">
+  <head>
+    <title>XSyn DSL Manager</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </head>
+
+  <body ng-controller="MainController as mc">
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script src="/bower_components/bootbox.js/bootbox.js"></script>
+    <script src="js/code_controller.js"></script>
+    <script src="js/controller.js"></script>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-inverse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li><a ui-sref="configure">DSLs</a></li>
+        <li><a ui-sref="code">Code</a></li>
+      </ul>
+    </nav>
+
+
+    <!-- this is the div where the views are placed into: -->
+    <div ui-view=""></div>
+
+
+    <div class="error-bottom-of-page animated" id="error-div" ng-bind="mc.errorMessage">
+    </div>
+  </body>
+</html>
