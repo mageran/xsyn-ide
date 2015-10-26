@@ -287,12 +287,13 @@ xsynApp.directive('nonterminal',['$rootScope',function($rootScope) {
 	restrict : 'AE',
 	templateUrl : 'nonterminal.tmpl.html',
 	link : function($scope, $element, $attrs) {
-	    var grammarObject = $scope.$parent.grammarObject;
-	    var nonterminals = grammarObject.nonterminals;
-	    var index = nonterminals.indexOf($scope.nt);
+	    $scope.pruleScopes = [];
 	    //$scope.__defineGetter__('showActionCode', function() { return $scope.$parent.showActionCode; });
 	    $scope.deleteNonterminal = function() {
 		console.log('deleting nonterminal at position ' + index);
+		var grammarObject = $scope.$parent.grammarObject;
+		var nonterminals = grammarObject.nonterminals;
+		var index = nonterminals.indexOf($scope.nt);
 		bootbox.confirm("Do you really want to delete this nonterminal with all its rules?", function(result) {
 		    if (!result) return;
 		    $scope.$apply(function() {
@@ -303,11 +304,27 @@ xsynApp.directive('nonterminal',['$rootScope',function($rootScope) {
 	    };
 	    $scope.addNonterminal = function() {
 		console.log('adding nonterminal...');
+		var grammarObject = $scope.$parent.grammarObject;
+		var nonterminals = grammarObject.nonterminals;
+		var index = nonterminals.indexOf($scope.nt);
 		var nt = {
 		    name : '',
 		    rules : [ { definition : '', action : '' } ]
 		};
 		nonterminals.splice(index+1,0,nt);
+	    };
+	    $scope.moveDownNonterminal = function() {
+		var grammarObject = $scope.$parent.grammarObject;
+		var nonterminals = grammarObject.nonterminals;
+		var index = nonterminals.indexOf($scope.nt);
+		var elem = nonterminals.splice(index,1)[0];
+		nonterminals.splice(index+1,0,elem)
+		console.log('nonterminals: ' + (grammarObject.nonterminals.map(function(nt) { return nt.name; })).join(','));
+	    };
+	    $scope.updateSepSymbolsInProductionRules = function() {
+		$scope.pruleScopes.forEach(function($cscope) {
+		    $cscope.updateSepSym();
+		});
 	    };
 	    //console.log($scope);
 	}
@@ -319,14 +336,26 @@ xsynApp.directive('productionrule',['$rootScope',function($rootScope) {
 	restrict : 'AE',
 	templateUrl : 'productionrule.tmpl.html',
 	link : function($scope, $element, $attr) {
+	    $scope.$parent.pruleScopes.push($scope);
 	    //$scope.__defineGetter__('showActionCode', function() { return $scope.$parent.showActionCode; });
 	    var prule = $scope.prule;
 	    var nt = $scope.$parent.nt;
 	    var prules = nt.rules;
 	    var index = prules.indexOf(prule);
 	    $scope.sepsym = index === 0 ? ':' : '|'
+	    $scope.updateSepSym = function() {
+		var prule = $scope.prule;
+		var nt = $scope.$parent.nt;
+		var prules = nt.rules;
+		var index = prules.indexOf(prule);
+		$scope.sepsym = index === 0 ? ':' : '|'
+	    };
 	    $scope.deleteRule = function() {
 		var doDelete = function(result) {
+		    var prule = $scope.prule;
+		    var nt = $scope.$parent.nt;
+		    var prules = nt.rules;
+		    var index = prules.indexOf(prule);
 		    if (!result) return;
 		    if (index >= 0) {
 			$scope.$apply(function() {
@@ -339,12 +368,26 @@ xsynApp.directive('productionrule',['$rootScope',function($rootScope) {
 	    };
 	    $scope.addRule = function() {
 		if (index < 0) return;
+		var prule = $scope.prule;
+		var nt = $scope.$parent.nt;
+		var prules = nt.rules;
+		var index = prules.indexOf(prule);
 		var newRule = {
 		    definition : '',
 		    action : ''
 		};
 		nt.rules.splice(index+1,0,newRule);
 		//$rootScope.refreshGrammar();
+	    };
+	    $scope.moveDownRule = function() {
+		var prule = $scope.prule;
+		var nt = $scope.$parent.nt;
+		var prules = nt.rules;
+		var index = prules.indexOf(prule);
+		var elem = prules.splice(index,1)[0];
+		prules.splice(index+1,0,elem);
+		index = prules.indexOf(prule);
+		$scope.$parent.updateSepSymbolsInProductionRules();
 	    };
 	}
     };
