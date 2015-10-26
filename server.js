@@ -131,14 +131,38 @@ var DslServer = function(app,gmgr) {
 var GrammarManager;
 var gmgr;
 
+var interactiveMode = false;
+var port = 9292;
+var enableRun = false;
+
+var cmdlineOptions = {};
+cmdlineOptions['-i'] = function(argv) {
+    interactiveMode = true;
+};
+cmdlineOptions['--enablerun'] = function(argv) {
+    enableRun = true;
+};
+cmdlineOptions['-p'] = function(argv) {
+    port = Number(argv.shift());
+};
+
 var cmdlineArguments = process.argv.slice(2);
+
+while (cmdlineArguments.length > 0) {
+    var arg = cmdlineArguments.shift();
+    var fun = cmdlineOptions[arg];
+    if (typeof(fun) === 'function') {
+	fun.call(0,cmdlineArguments);
+    }
+}
+
 if (require.main === module) {
     console.log('run as main');
 
     GrammarManager = require('./grammar_manager');
     gmgr = new GrammarManager();
 
-    if (cmdlineArguments.indexOf("-i") >= 0) {
+    if (interactiveMode) {
 	console.log('starting interactice shell...');
 	function myeval($$$$$x) {
 	    return eval($$$$$x);
@@ -151,11 +175,11 @@ if (require.main === module) {
 	    }
 	});
     } else {
-	if (cmdlineArguments.indexOf("--enablerun") >= 0) {
+	if (enableRun) {
 	    gmgr.enableRun = true;
 	}
 	new DslServer(app,gmgr);
-	var server = app.listen(9292, function () {
+	var server = app.listen(port, function () {
 	    var host = server.address().address;
 	    var port = server.address().port;
 	    
