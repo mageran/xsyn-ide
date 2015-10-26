@@ -1,0 +1,25 @@
+{
+  "name": "xsyn-ide",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mageran/xsyn-ide",
+  "authors": [
+    "Matthias Anlauff <matthias@anlauff.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router": "~0.2.15",
+    "bootbox.js": "bootbox#~4.4.0",
+    "bootstrap": "~3.3.5",
+    "moment": "~2.10.6"
+  }
+}
