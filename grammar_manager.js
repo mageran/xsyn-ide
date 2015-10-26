@@ -14,7 +14,7 @@ var GrammarManager = function(opts) {
 
 GrammarManager.prototype.ensureGrammarDir = function() {
     try {
-	fs.mkdir(this.grammarDir);
+	fs.mkdirSync(this.grammarDir);
     } catch (e) {
 	console.error(e);
     }
